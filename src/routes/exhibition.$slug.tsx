@@ -109,7 +109,7 @@ function Detail() {
             Statement<br />— {item.curator}
           </p>
           <div className="md:col-span-8 space-y-5 text-base md:text-lg leading-relaxed text-foreground/85">
-            {item.longDesc.map((p, i) => (
+            {item.longDesc.map((p: string, i: number) => (
               <p key={i}>{p}</p>
             ))}
           </div>
