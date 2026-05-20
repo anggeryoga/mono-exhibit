@@ -33,9 +33,9 @@ export function Header() {
 
         <Link
           to="/"
-          className="text-center font-display tracking-[0.32em] md:tracking-[0.4em] text-[11px] md:text-sm lowercase hover:tracking-[0.45em] transition-all duration-500"
+          className="text-center font-display tracking-[0.18em] md:tracking-[0.24em] text-[11px] md:text-sm lowercase hover:tracking-[0.3em] transition-all duration-500"
         >
-          neirovision
+          polisibang.site
         </Link>
 
         <nav className="flex justify-end items-center gap-3 md:gap-5">
