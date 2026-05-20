@@ -1,7 +1,10 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
-  "compatibility_date": "2025-09-24",
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "mono-exhibit",
+  "compatibility_date": "2025-05-20",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts",
+  "main": "./dist/server/index.js",
+  "assets": {
+    "directory": "./dist/client"
+  }
 }
