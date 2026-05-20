@@ -1,5 +1,7 @@
+import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/site-header";
+import { SearchBar } from "@/components/search-bar";
 import { exhibitions, type Exhibition } from "@/lib/exhibitions";
 
 export const Route = createFileRoute("/")({
@@ -64,19 +66,26 @@ function GalleryItem({ item, offset }: { item: Exhibition; offset: string }) {
           loading="lazy"
           width={512}
           height={768}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] group-hover:opacity-90"
+          className="img-mono h-full w-full object-cover group-hover:scale-[1.03]"
         />
       </div>
     </Link>
   );
 }
 
-function Gallery() {
+function Gallery({ items }: { items: Exhibition[] }) {
   const offsets = ["", "", "", "", "", "", "md:mt-16", "md:mt-16", "md:mt-16", "md:mt-16", "md:mt-16", "md:mt-16"];
+  if (items.length === 0) {
+    return (
+      <section className="px-4 py-24 text-center">
+        <p className="text-[11px] uppercase tracking-[0.25em] text-foreground/60">No exhibitions match your search.</p>
+      </section>
+    );
+  }
   return (
-    <section className="px-4 pb-16">
+    <section className="px-4 pb-16 pt-8">
       <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-4 lg:grid-cols-6">
-        {exhibitions.map((e, i) => (
+        {items.map((e, i) => (
           <GalleryItem key={e.slug} item={e} offset={offsets[i] ?? ""} />
         ))}
       </div>
@@ -85,11 +94,30 @@ function Gallery() {
 }
 
 function Index() {
+  const [query, setQuery] = useState("");
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return exhibitions;
+    return exhibitions.filter((e) =>
+      [e.title, e.desc, e.category, e.curator, e.location, e.code]
+        .join(" ")
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [query]);
+
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans">
+    <main className="min-h-screen text-foreground font-sans">
       <Header />
       <Hero />
-      <Gallery />
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Search exhibitions, curators, categories…"
+        resultCount={filtered.length}
+        totalCount={exhibitions.length}
+      />
+      <Gallery items={filtered} />
     </main>
   );
 }
