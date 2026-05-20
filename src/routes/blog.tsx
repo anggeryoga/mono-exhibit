@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/site-header";
 import { SearchBar } from "@/components/search-bar";
-import { exhibitions } from "@/lib/exhibitions";
+import { posts, imageFor } from "@/lib/posts";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -15,19 +15,6 @@ export const Route = createFileRoute("/blog")({
   }),
   component: BlogPage,
 });
-
-const posts = [
-  { slug: "concrete-dreams", kicker: "Field Notes", title: "Walking through Concrete Dreams", author: "Ines Vargas", date: "12 Mar 2026", read: "6 min", excerpt: "On the strange choreography of brutalist halls and the dancers we placed inside them." },
-  { slug: "404-art-not-found", kicker: "Essay", title: "404 as a Medium", author: "Mara Voss", date: "21 Jan 2026", read: "9 min", excerpt: "What happens when the broken file becomes the final work, signed and dated." },
-  { slug: "floracipher", kicker: "Studio Visit", title: "Inside the Floracipher Greenhouse", author: "Lena Park", date: "02 Feb 2026", read: "7 min", excerpt: "Steel petals, hallucinated taxonomies, and a neural network that refuses to bloom on schedule." },
-  { slug: "the-last-library", kicker: "Conversation", title: "Burning the Last Library", author: "Theo Albrecht", date: "18 Mar 2026", read: "5 min", excerpt: "A short interview with the curator on what it means to lend a book made of wax." },
-  { slug: "haute-data", kicker: "Long Read", title: "The Dress that Reads the Feed", author: "Camille Ortiz", date: "03 Jun 2026", read: "12 min", excerpt: "Optical fiber, trending hashtags, and the surprisingly tender choreography of algorithmic fashion." },
-  { slug: "theremin-forest", kicker: "Sound", title: "How to Score a Forest", author: "Erik Lund", date: "20 May 2026", read: "8 min", excerpt: "Tuning a woodland of antennae and learning to be quiet enough to hear the trees." },
-];
-
-function imageFor(slug: string) {
-  return exhibitions.find((e) => e.slug === slug)?.img;
-}
 
 function BlogPage() {
   const [query, setQuery] = useState("");
