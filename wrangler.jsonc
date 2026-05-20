@@ -1,6 +1,0 @@
-{
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "mono-exhibit",
-  "compatibility_date": "2026-05-20",
-  "compatibility_flags": ["nodejs_compat"]
-}
