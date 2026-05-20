@@ -15,42 +15,45 @@ const right = [
 
 export function Header() {
   return (
-    <header className="border-b border-foreground/80 sticky top-0 bg-background z-50">
-      <div className="grid grid-cols-3 items-center px-3 md:px-4 py-3 text-[9px] md:text-[10px] uppercase tracking-[0.18em]">
-        <nav className="flex gap-3 md:gap-5 overflow-hidden">
+    <header className="border-b border-foreground/80 sticky top-0 z-50 backdrop-blur-md bg-background/70 supports-[backdrop-filter]:bg-background/55">
+      <div className="grid grid-cols-3 items-center px-3 md:px-5 py-3 md:py-3.5 text-[9px] md:text-[10px] uppercase tracking-[0.22em]">
+        <nav className="flex gap-3 md:gap-6 overflow-hidden items-center">
           {links.map((l, i) => (
             <Link
               key={l.to}
               to={l.to}
-              className={`hover:opacity-60 ${i > 0 ? "hidden sm:inline" : ""}`}
-              activeProps={{ className: "font-bold underline underline-offset-4" }}
+              className={`relative py-1 hover:opacity-100 opacity-70 transition-opacity ${i > 0 ? "hidden sm:inline" : ""}`}
+              activeProps={{ className: "font-bold opacity-100 [&]:opacity-100" }}
               activeOptions={{ exact: true }}
             >
               {l.label}
             </Link>
           ))}
         </nav>
-        <Link to="/" className="text-center font-bold tracking-[0.25em] md:tracking-[0.3em] text-[10px] md:text-xs">
-          NEIROVISION
+
+        <Link
+          to="/"
+          className="text-center font-display tracking-[0.18em] md:tracking-[0.24em] text-[11px] md:text-sm lowercase hover:tracking-[0.3em] transition-all duration-500"
+        >
+          polisibang.site
         </Link>
+
         <nav className="flex justify-end items-center gap-3 md:gap-5">
           {right.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className="hover:opacity-60 hidden md:inline"
-              activeProps={{ className: "font-bold underline underline-offset-4" }}
+              className="hidden md:inline opacity-70 hover:opacity-100 transition-opacity"
+              activeProps={{ className: "font-bold [&]:opacity-100" }}
             >
               {l.label}
             </Link>
           ))}
-          <span className="flex gap-3 md:ml-2">
-            <Link to="/contacts" aria-label="Mail">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="5" width="18" height="14"/><path d="M3 5l9 8 9-8"/></svg>
+          <span className="flex items-center gap-3 md:ml-3 md:pl-3 md:border-l md:border-foreground/30">
+            <Link to="/contacts" aria-label="Mail" className="opacity-70 hover:opacity-100">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="5" width="18" height="14"/><path d="M3 5l9 8 9-8"/></svg>
             </Link>
-            <button aria-label="Search">
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            </button>
+            <span className="hidden md:inline font-mono tabular-nums text-[9px] opacity-60">25 · 26</span>
           </span>
         </nav>
       </div>
@@ -70,7 +73,7 @@ export function PageShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans">
+    <main className="min-h-screen text-foreground font-sans">
       <Header />
       <section className="px-4 pt-10 pb-6 border-b border-foreground/80">
         <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/60">{eyebrow}</p>
