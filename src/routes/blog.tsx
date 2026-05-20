@@ -12,6 +12,9 @@ export const Route = createFileRoute("/blog")({
       { property: "og:title", content: "Blog — polisibang.site" },
       { property: "og:description", content: "Field notes, essays, and dispatches from the polisibang.site editorial desk." },
     ],
+    links: [
+      { rel: "alternate", type: "application/rss+xml", title: "polisibang.site — Blog RSS", href: "/rss.xml" },
+    ],
   }),
   component: BlogPage,
 });

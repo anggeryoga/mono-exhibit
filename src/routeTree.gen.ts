@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoreRouteImport } from './routes/store'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactsRouteImport } from './routes/contacts'
@@ -21,6 +22,11 @@ import { Route as ExhibitionSlugRouteImport } from './routes/exhibition.$slug'
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RankingRoute = RankingRouteImport.update({
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof ContactsRoute
   '/privacy': typeof PrivacyRoute
   '/ranking': typeof RankingRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/store': typeof StoreRoute
   '/exhibition/$slug': typeof ExhibitionSlugRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/contacts': typeof ContactsRoute
   '/privacy': typeof PrivacyRoute
   '/ranking': typeof RankingRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/store': typeof StoreRoute
   '/exhibition/$slug': typeof ExhibitionSlugRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/contacts': typeof ContactsRoute
   '/privacy': typeof PrivacyRoute
   '/ranking': typeof RankingRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/store': typeof StoreRoute
   '/exhibition/$slug': typeof ExhibitionSlugRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/privacy'
     | '/ranking'
+    | '/rss.xml'
     | '/store'
     | '/exhibition/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/privacy'
     | '/ranking'
+    | '/rss.xml'
     | '/store'
     | '/exhibition/$slug'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/privacy'
     | '/ranking'
+    | '/rss.xml'
     | '/store'
     | '/exhibition/$slug'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   ContactsRoute: typeof ContactsRoute
   PrivacyRoute: typeof PrivacyRoute
   RankingRoute: typeof RankingRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   StoreRoute: typeof StoreRoute
   ExhibitionSlugRoute: typeof ExhibitionSlugRoute
 }
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/store'
       fullPath: '/store'
       preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ranking': {
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactsRoute: ContactsRoute,
   PrivacyRoute: PrivacyRoute,
   RankingRoute: RankingRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   StoreRoute: StoreRoute,
   ExhibitionSlugRoute: ExhibitionSlugRoute,
 }
