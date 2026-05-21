@@ -1,20 +1,9 @@
 import { useState, useMemo } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/site-header";
 import { SearchBar } from "@/components/search-bar";
 import { exhibitions, type Exhibition } from "@/lib/exhibitions";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "polisibang.site — Exhibitions Archive" },
-      { name: "description", content: "Experimental gallery archive of AI art, surreal portraits, and avant-garde installations." },
-      { property: "og:title", content: "polisibang.site — Exhibitions Archive" },
-      { property: "og:description", content: "Experimental gallery archive of AI art, surreal portraits, and avant-garde installations." },
-    ],
-  }),
-  component: Index,
-});
+import { usePageMeta } from "@/lib/use-page-meta";
 
 function Symbol() {
   return (
@@ -47,16 +36,10 @@ function Hero() {
 
 function GalleryItem({ item, offset }: { item: Exhibition; offset: string }) {
   return (
-    <Link
-      to="/exhibition/$slug"
-      params={{ slug: item.slug }}
-      className={`flex flex-col group ${offset}`}
-    >
+    <Link to={`/exhibition/${item.slug}`} className={`flex flex-col group ${offset}`}>
       <div className="mb-3">
         <h3 className="text-[11px] font-bold uppercase tracking-wider leading-tight">{item.title}</h3>
-        <p className="mt-1 text-[10px] leading-snug text-foreground/70 uppercase tracking-wide">
-          {item.desc}
-        </p>
+        <p className="mt-1 text-[10px] leading-snug text-foreground/70 uppercase tracking-wide">{item.desc}</p>
         <p className="mt-1 text-[10px] font-bold tracking-wider">{item.code}</p>
       </div>
       <div className="overflow-hidden bg-foreground/5 aspect-[2/3]">
@@ -93,16 +76,17 @@ function Gallery({ items }: { items: Exhibition[] }) {
   );
 }
 
-function Index() {
+export default function Index() {
+  usePageMeta({
+    title: "polisibang.site — Exhibitions Archive",
+    description: "Experimental gallery archive of AI art, surreal portraits, and avant-garde installations.",
+  });
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return exhibitions;
     return exhibitions.filter((e) =>
-      [e.title, e.desc, e.category, e.curator, e.location, e.code]
-        .join(" ")
-        .toLowerCase()
-        .includes(q),
+      [e.title, e.desc, e.category, e.curator, e.location, e.code].join(" ").toLowerCase().includes(q),
     );
   }, [query]);
 

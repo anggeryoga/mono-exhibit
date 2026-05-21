@@ -1,17 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/site-header";
-
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — polisibang.site" },
-      { name: "description", content: "polisibang.site is an experimental editorial archive of post-digital art, surreal portraiture, and algorithmic design." },
-      { property: "og:title", content: "About — polisibang.site" },
-      { property: "og:description", content: "polisibang.site is an experimental editorial archive of post-digital art, surreal portraiture, and algorithmic design." },
-    ],
-  }),
-  component: AboutPage,
-});
+import { usePageMeta } from "@/lib/use-page-meta";
 
 const team = [
   { name: "Ines Vargas", role: "Director / Curator" },
@@ -22,7 +10,11 @@ const team = [
   { name: "Camille Ortiz", role: "Fashion / Wearables" },
 ];
 
-function AboutPage() {
+export default function About() {
+  usePageMeta({
+    title: "About — polisibang.site",
+    description: "polisibang.site is an experimental editorial archive of post-digital art, surreal portraiture, and algorithmic design.",
+  });
   return (
     <PageShell
       eyebrow="About / Studio"

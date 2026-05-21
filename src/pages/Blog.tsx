@@ -1,25 +1,15 @@
 import { useState, useMemo } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/site-header";
 import { SearchBar } from "@/components/search-bar";
 import { posts, imageFor } from "@/lib/posts";
+import { usePageMeta } from "@/lib/use-page-meta";
 
-export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title: "Blog — polisibang.site" },
-      { name: "description", content: "Field notes, essays, and dispatches from the polisibang.site editorial desk." },
-      { property: "og:title", content: "Blog — polisibang.site" },
-      { property: "og:description", content: "Field notes, essays, and dispatches from the polisibang.site editorial desk." },
-    ],
-    links: [
-      { rel: "alternate", type: "application/rss+xml", title: "polisibang.site — Blog RSS", href: "/rss.xml" },
-    ],
-  }),
-  component: BlogPage,
-});
-
-function BlogPage() {
+export default function Blog() {
+  usePageMeta({
+    title: "Blog — polisibang.site",
+    description: "Field notes, essays, and dispatches from the polisibang.site editorial desk.",
+  });
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -53,7 +43,7 @@ function BlogPage() {
 
       {featured && (
         <section className="px-4 py-10 border-b border-foreground/80">
-          <Link to="/exhibition/$slug" params={{ slug: featured.slug }} className="grid grid-cols-1 md:grid-cols-12 gap-6 group">
+          <Link to={`/exhibition/${featured.slug}`} className="grid grid-cols-1 md:grid-cols-12 gap-6 group">
             <div className="md:col-span-7 overflow-hidden bg-foreground/5 aspect-[4/3]">
               <img src={imageFor(featured.slug)} alt={featured.title} className="img-mono h-full w-full object-cover group-hover:scale-[1.02]" />
             </div>
@@ -75,7 +65,7 @@ function BlogPage() {
         <section className="px-4 py-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-10">
             {rest.map((p) => (
-              <Link key={p.slug} to="/exhibition/$slug" params={{ slug: p.slug }} className="group flex flex-col">
+              <Link key={p.slug} to={`/exhibition/${p.slug}`} className="group flex flex-col">
                 <div className="overflow-hidden bg-foreground/5 aspect-[4/5]">
                   <img src={imageFor(p.slug)} alt={p.title} loading="lazy" className="img-mono h-full w-full object-cover group-hover:scale-[1.03]" />
                 </div>

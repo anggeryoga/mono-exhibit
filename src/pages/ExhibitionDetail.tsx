@@ -1,60 +1,39 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { Link, useParams } from "react-router-dom";
 import { Header } from "@/components/site-header";
 import { exhibitions, getExhibition } from "@/lib/exhibitions";
+import { usePageMeta } from "@/lib/use-page-meta";
 
-export const Route = createFileRoute("/exhibition/$slug")({
-  loader: ({ params }) => {
-    const item = getExhibition(params.slug);
-    if (!item) throw notFound();
-    return { item };
-  },
-  head: ({ loaderData }) => {
-    const t = loaderData?.item;
-    const title = t ? `${t.title} — polisibang.site` : "Exhibition — polisibang.site";
-    const desc = t?.desc ?? "Exhibition detail.";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: desc },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        ...(t ? [{ property: "og:image", content: t.img }] : []),
-      ],
-    };
-  },
-  notFoundComponent: () => (
-    <main className="min-h-screen bg-background text-foreground font-sans">
-      <Header />
-      <div className="px-4 py-24 text-center">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/60">404 / Not in Archive</p>
-        <h1 className="mt-4 font-display text-5xl md:text-7xl uppercase">No such exhibition</h1>
-        <Link to="/" className="mt-8 inline-block border-b border-foreground text-[10px] uppercase tracking-[0.2em] pb-1">
-          Back to Archive
-        </Link>
-      </div>
-    </main>
-  ),
-  errorComponent: ({ error }) => (
-    <main className="min-h-screen bg-background text-foreground font-sans">
-      <Header />
-      <div className="px-4 py-24 text-center">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/60">Error</p>
-        <p className="mt-4">{error.message}</p>
-      </div>
-    </main>
-  ),
-  component: Detail,
-});
+export default function ExhibitionDetail() {
+  const { slug = "" } = useParams();
+  const item = getExhibition(slug);
 
-function Detail() {
-  const { item } = Route.useLoaderData();
+  usePageMeta({
+    title: item ? `${item.title} — polisibang.site` : "Exhibition — polisibang.site",
+    description: item?.desc ?? "Exhibition detail.",
+    image: item?.img,
+  });
+
+  if (!item) {
+    return (
+      <main className="min-h-screen bg-background text-foreground font-sans">
+        <Header />
+        <div className="px-4 py-24 text-center">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/60">404 / Not in Archive</p>
+          <h1 className="mt-4 font-display text-5xl md:text-7xl uppercase">No such exhibition</h1>
+          <Link to="/" className="mt-8 inline-block border-b border-foreground text-[10px] uppercase tracking-[0.2em] pb-1">
+            Back to Archive
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   const others = exhibitions.filter((e) => e.slug !== item.slug).slice(0, 4);
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans">
       <Header />
 
-      {/* Breadcrumb */}
       <div className="px-4 pt-6 text-[10px] uppercase tracking-[0.18em] flex gap-2 text-foreground/60">
         <Link to="/" className="hover:text-foreground">Index</Link>
         <span>/</span>
@@ -63,7 +42,6 @@ function Detail() {
         <span className="text-foreground">{item.code}</span>
       </div>
 
-      {/* Title block */}
       <section className="px-4 pt-6 pb-8 border-b border-foreground/80">
         <div className="flex items-baseline justify-between gap-4 text-[10px] uppercase tracking-[0.18em] text-foreground/70">
           <span>{item.category}</span>
@@ -80,17 +58,10 @@ function Detail() {
         </p>
       </section>
 
-      {/* Image + meta */}
       <section className="grid grid-cols-1 md:grid-cols-12 gap-x-4 gap-y-8 px-4 py-10 border-b border-foreground/80">
         <div className="md:col-span-8">
           <div className="overflow-hidden bg-foreground/5 aspect-[3/4] md:aspect-[4/3]">
-            <img
-              src={item.img}
-              alt={item.title}
-              width={1024}
-              height={768}
-              className="h-full w-full object-cover"
-            />
+            <img src={item.img} alt={item.title} width={1024} height={768} className="h-full w-full object-cover" />
           </div>
         </div>
         <aside className="md:col-span-4 flex flex-col gap-6 text-[11px] uppercase tracking-[0.15em]">
@@ -102,7 +73,6 @@ function Detail() {
         </aside>
       </section>
 
-      {/* Long description */}
       <section className="px-4 py-12 border-b border-foreground/80">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <p className="md:col-span-4 text-[10px] uppercase tracking-[0.2em] text-foreground/60">
@@ -116,31 +86,17 @@ function Detail() {
         </div>
       </section>
 
-      {/* Related */}
       <section className="px-4 py-12">
         <div className="flex items-baseline justify-between mb-6 text-[10px] uppercase tracking-[0.2em]">
           <span>Continue / Archive</span>
-          <Link to="/" className="border-b border-foreground pb-0.5 hover:opacity-60">
-            All Exhibitions →
-          </Link>
+          <Link to="/" className="border-b border-foreground pb-0.5 hover:opacity-60">All Exhibitions →</Link>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 md:gap-x-4">
           {others.map((o) => (
-            <Link
-              key={o.slug}
-              to="/exhibition/$slug"
-              params={{ slug: o.slug }}
-              className="group flex flex-col"
-            >
+            <Link key={o.slug} to={`/exhibition/${o.slug}`} className="group flex flex-col">
               <div className="overflow-hidden bg-foreground/5 aspect-[2/3]">
-                <img
-                  src={o.img}
-                  alt={o.title}
-                  loading="lazy"
-                  width={512}
-                  height={768}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] group-hover:opacity-90"
-                />
+                <img src={o.img} alt={o.title} loading="lazy" width={512} height={768}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] group-hover:opacity-90" />
               </div>
               <h3 className="mt-3 text-[11px] font-bold uppercase tracking-wider">{o.title}</h3>
               <p className="text-[10px] uppercase tracking-wide text-foreground/60">{o.category} · {o.code}</p>

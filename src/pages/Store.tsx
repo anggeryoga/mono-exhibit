@@ -1,20 +1,8 @@
 import { useState, useMemo } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/site-header";
 import { SearchBar } from "@/components/search-bar";
 import { exhibitions } from "@/lib/exhibitions";
-
-export const Route = createFileRoute("/store")({
-  head: () => ({
-    meta: [
-      { title: "Store — polisibang.site" },
-      { name: "description", content: "Editions, prints, and artifacts from the polisibang.site archive." },
-      { property: "og:title", content: "Store — polisibang.site" },
-      { property: "og:description", content: "Editions, prints, and artifacts from the polisibang.site archive." },
-    ],
-  }),
-  component: StorePage,
-});
+import { usePageMeta } from "@/lib/use-page-meta";
 
 const products = exhibitions.slice(0, 8).map((e, i) => ({
   ...e,
@@ -23,7 +11,11 @@ const products = exhibitions.slice(0, 8).map((e, i) => ({
   kind: ["Print", "Poster", "Catalogue", "Object"][i % 4],
 }));
 
-function StorePage() {
+export default function Store() {
+  usePageMeta({
+    title: "Store — polisibang.site",
+    description: "Editions, prints, and artifacts from the polisibang.site archive.",
+  });
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

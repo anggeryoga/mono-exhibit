@@ -1,17 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/site-header";
-
-export const Route = createFileRoute("/contacts")({
-  head: () => ({
-    meta: [
-      { title: "Contacts — polisibang.site" },
-      { name: "description", content: "Get in touch with the polisibang.site editorial desk, press, and visitor services." },
-      { property: "og:title", content: "Contacts — polisibang.site" },
-      { property: "og:description", content: "Get in touch with the polisibang.site editorial desk, press, and visitor services." },
-    ],
-  }),
-  component: ContactsPage,
-});
+import { usePageMeta } from "@/lib/use-page-meta";
 
 const channels = [
   { k: "General", v: "hello@polisibang.site" },
@@ -20,7 +8,11 @@ const channels = [
   { k: "Store / Editions", v: "store@polisibang.site" },
 ];
 
-function ContactsPage() {
+export default function Contacts() {
+  usePageMeta({
+    title: "Contacts — polisibang.site",
+    description: "Get in touch with the polisibang.site editorial desk, press, and visitor services.",
+  });
   return (
     <PageShell
       eyebrow="Contact / Desk Open"

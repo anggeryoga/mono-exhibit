@@ -1,29 +1,21 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { PageShell } from "@/components/site-header";
 import { exhibitions } from "@/lib/exhibitions";
+import { usePageMeta } from "@/lib/use-page-meta";
 
-export const Route = createFileRoute("/ranking")({
-  head: () => ({
-    meta: [
-      { title: "Ranking — polisibang.site" },
-      { name: "description", content: "Weekly ranked archive of the most visited exhibitions on polisibang.site." },
-      { property: "og:title", content: "Ranking — polisibang.site" },
-      { property: "og:description", content: "Weekly ranked archive of the most visited exhibitions on polisibang.site." },
-    ],
-  }),
-  component: RankingPage,
-});
-
-// Deterministic pseudo-metrics so the ranking feels real
 const metrics = exhibitions
   .map((e, i) => {
     const visits = 8240 - i * 437 + ((i * 91) % 233);
-    const trend = ((i * 7) % 11) - 5; // -5..+5
+    const trend = ((i * 7) % 11) - 5;
     return { ...e, visits, trend };
   })
   .sort((a, b) => b.visits - a.visits);
 
-function RankingPage() {
+export default function Ranking() {
+  usePageMeta({
+    title: "Ranking — polisibang.site",
+    description: "Weekly ranked archive of the most visited exhibitions on polisibang.site.",
+  });
   return (
     <PageShell
       eyebrow="Archive / Week 21"
@@ -44,8 +36,7 @@ function RankingPage() {
           {metrics.map((m, idx) => (
             <li key={m.slug} className="border-b border-foreground/30">
               <Link
-                to="/exhibition/$slug"
-                params={{ slug: m.slug }}
+                to={`/exhibition/${m.slug}`}
                 className="grid grid-cols-12 gap-3 md:gap-4 items-center py-4 group hover:bg-foreground/[0.03]"
               >
                 <div className="col-span-2 md:col-span-1 font-display text-3xl md:text-5xl leading-none">
